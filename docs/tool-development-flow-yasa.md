@@ -4,20 +4,24 @@ This document describes the intended development and execution flow for PySemBri
 
 ## Repository Boundary
 
-PySemBridge should stay an independent tool repository. It should contain:
+PySemBridge is the umbrella repository for the bridge framework and the
+reproducible YASA integration. It contains:
 
 - Semantic Bridge IR schema and bridge examples.
 - Recognizers, synthesizers, compilers, verifiers, and pipeline orchestration code.
-- Minimal integration patches for analyzers that need a small interface extension.
+- The full YASA-sembridge engine copy used by the current experiments.
 - Documentation and scripts needed to reproduce the workflow.
 
-It should not contain a copied YASA engine tree, `yasa-llm-taint-repair`, benchmark source trees, large binaries, or generated analyzer outputs. The YASA-side interface changes are kept as a patch in:
+It should not contain `yasa-llm-taint-repair`, benchmark source trees, generated
+analyzer outputs, `node_modules`, or runtime logs. The integrated YASA tool is
+kept in:
 
 ```text
-integrations/yasa/yasa-sembridge-interface.patch
+integrations/yasa/YASA-Engine-sembridge/
 ```
 
-Apply that patch to a separate YASA checkout when the backend needs `--semanticBridgeFacts` support.
+This directory replaces the earlier patch-only integration and is the canonical
+backend to use for `--semanticBridgeFacts` experiments.
 
 ## Core Idea
 
@@ -62,9 +66,9 @@ Checks whether a bridge connects the intended source expression to the intended 
 
 Runs the end-to-end YASA workflow: synthesize bridge, compile facts, run YASA, augment/read reports, and write summaries.
 
-## YASA Interface Patch
+## YASA-sembridge Integrated Tool
 
-The YASA patch adds a narrow interface:
+The integrated YASA copy adds a narrow interface:
 
 - `Config.semanticBridgeFactsFile`
 - `Config.semanticBridgeFacts`
@@ -72,7 +76,7 @@ The YASA patch adds a narrow interface:
 - facts loading before analyzer construction
 - SARIF augmentation after normal analyzer output
 
-The patch adds two helper files in YASA:
+The integration adds two helper files in YASA:
 
 ```text
 src/engine/analyzer/common/semantic-bridge-facts-loader.ts
@@ -125,7 +129,7 @@ python3 -m pysembridge.cli compile-yasa \
   --output experiments/results/cve-2025-55156-pyload.yasa-facts.json
 ```
 
-5. Run patched YASA.
+5. Run YASA-sembridge.
 
 YASA still receives the normal rule config. PySemBridge facts are passed separately:
 
@@ -151,7 +155,9 @@ python3 -m pysembridge.cli verify-sarif \
 
 7. Record the result.
 
-Keep generated reports under `experiments/results/`, which is intentionally ignored by git. Commit only stable bridge IR, source code, scripts, docs, and the minimal YASA patch.
+Keep generated reports under `experiments/results/`, which is intentionally
+ignored by git. Commit stable bridge IR, PySemBridge source code, experiment
+scripts, docs, and the integrated YASA-sembridge source tree.
 
 ## pyload Example
 
@@ -167,13 +173,15 @@ url
 
 Baseline YASA can report a boundary around `db.update_link_info(data)`, but the real SQL sink is inside `FileDatabaseMethods.update_link_info`. PySemBridge records the missing call edge and container/string propagation as Semantic Bridge IR, compiles it to YASA facts, and lets the patched YASA report include an enhanced complete-chain finding.
 
-## Why Patch Instead of Copying YASA
+## Why Keep a Full YASA-sembridge Copy
 
-The YASA changes are intentionally small and kept as a patch because:
+The current repository keeps a full modified YASA copy because:
 
-- PySemBridge remains analyzer-agnostic.
-- YASA upstream can still be tracked independently.
-- Reviewers can see the exact analyzer interface surface.
-- The repository avoids mixing PySemBridge with the larger YASA or llm-taint codebases.
+- The experiment can be reproduced from a single repository checkout.
+- The exact backend source used for SARIF augmentation is visible.
+- The older standalone diff/patch file is no longer needed.
+- Generated dependency and runtime directories can still stay out of git.
 
-If the interface stabilizes, the next step is to upstream the patch or maintain a dedicated YASA fork/branch. PySemBridge should still keep the patch as reproducibility documentation.
+If the interface stabilizes further, the next step is to upstream the changes or
+maintain a dedicated YASA fork/branch. This repository copy remains the
+reproducible experimental backend.

@@ -5,12 +5,11 @@
 Keep the original YASA engine unchanged:
 
 ```text
-YASA-Engine-upstream      baseline, do not edit
-YASA-Engine-sembridge     experimental copy with PySemBridge API
-PySemBridge               tool-independent bridge IR and adapters
+integrations/yasa/YASA-Engine-sembridge  integrated YASA copy with PySemBridge API
+PySemBridge                              bridge IR, adapters, pipelines, docs
 ```
 
-This layout keeps the experiment defensible:
+When comparing against a baseline YASA checkout, keep the experiment defensible:
 
 ```text
 same benchmark + same source/sink rules + original YASA
@@ -42,14 +41,24 @@ YASA-Engine-sembridge/src/engine/analyzer/common/semantic-bridge-facts-loader.ts
 
 ## Current Capability
 
-The current integration is an API/bootstrap layer only:
+The current integration loads bridge facts and performs report-level completion:
 
 ```text
-CLI flag -> facts JSON validation -> Config.semanticBridgeFacts
+CLI flag -> facts JSON validation -> Config.semanticBridgeFacts -> SARIF enhanced result
 ```
 
-It does not yet change propagation behavior. The next step is to consume these
-facts inside analyzer-level call resolution and taint-transfer logic.
+It does not yet change internal propagation behavior. The next step is to consume
+these facts inside analyzer-level call resolution and taint-transfer logic.
+
+## Tool Location
+
+The complete modified tool is checked in at:
+
+```text
+integrations/yasa/YASA-Engine-sembridge/
+```
+
+See `docs/yasa-sembridge-tool-guide.md` for install and execution commands.
 
 ## Recommended Injection Levels
 

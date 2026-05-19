@@ -29,6 +29,7 @@ pysembridge/
 bridges/              Per-CVE Semantic Bridge IR files
 benchmarks/py-bench/  Six Python CVE benchmark projects
 experiments/          Experiment scripts and generated outputs
+integrations/yasa/    Integrated YASA-sembridge engine copy
 docs/                 Design notes
 ```
 
@@ -135,5 +136,6 @@ finding. Analyzer-level propagation injection is the next deeper integration
 stage.
 
 See `docs/tool-development-flow-yasa.md` for the complete PySemBridge workflow
-and `integrations/yasa/yasa-sembridge-interface.patch` for the minimal YASA-side
-interface patch.
+and `docs/yasa-sembridge-tool-guide.md` for the integrated YASA-sembridge tool
+usage guide. The full modified YASA engine is checked in under
+`integrations/yasa/YASA-Engine-sembridge/`.
