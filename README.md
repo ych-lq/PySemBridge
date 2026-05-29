@@ -127,11 +127,14 @@ This repository currently contains:
 - Tool-independent Semantic Bridge IR schema.
 - AST-based semantic gap recognizer covering major Python dynamic feature families.
 - Source-only `scan-gaps` candidate generation for arbitrary Python projects.
-- Generic candidate Semantic Bridge IR synthesis for the six dynamic feature families.
+- Generic candidate Semantic Bridge IR synthesis for recognized dynamic feature families.
 - Generic auto synthesis pipeline plus one executable pyload-like synthesizer.
 - YASA facts compiler.
 - YASA-sembridge end-to-end pipeline runner.
 - Bridge and SARIF trace verifiers.
+
+The current recognizer groups feature hits into ten broad semantic gap families;
+see `docs/recognizer-dynamic-features.md` for the maintained coverage list.
 
 The current YASA integration uses report-level completion: YASA emits a baseline
 boundary finding, then PySemBridge facts append an enhanced complete-chain SARIF
