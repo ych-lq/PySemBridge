@@ -141,6 +141,7 @@ stage.
 See `docs/repository-structure.md` for the repository layout,
 `docs/recognizer-dynamic-features.md` for AST recognizer coverage,
 `docs/tool-development-flow-yasa.md` for the complete PySemBridge workflow,
+`docs/competition-code-stats.md` for competition line-count scope,
 `docs/security-test-report.md` for the security test record, and
 `docs/yasa-sembridge-tool-guide.md` for the integrated YASA-sembridge usage
 guide. The full modified YASA engine is checked in under

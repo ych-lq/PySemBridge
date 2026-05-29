@@ -73,6 +73,7 @@ experiments/scripts/
 - 仓库结构说明：`repository-structure.md`
 - 动态特征识别覆盖说明：`recognizer-dynamic-features.md`
 - 整体工具流程：`tool-development-flow-yasa.md`
+- 比赛代码统计口径：`competition-code-stats.md`
 - 安全测试报告：`security-test-report.md`
 - 集成版 YASA 操作指南：`yasa-sembridge-tool-guide.md`
 
