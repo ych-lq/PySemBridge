@@ -68,10 +68,12 @@ experiments/scripts/
 
 ## Documentation Scope
 
-`docs/` 只保留三类文档：
+`docs/` 主要保留以下文档：
 
 - 仓库结构说明：`repository-structure.md`
+- 动态特征识别覆盖说明：`recognizer-dynamic-features.md`
 - 整体工具流程：`tool-development-flow-yasa.md`
+- 安全测试报告：`security-test-report.md`
 - 集成版 YASA 操作指南：`yasa-sembridge-tool-guide.md`
 
 其他过程性材料不放在仓库文档目录中。

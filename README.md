@@ -63,9 +63,12 @@ python3 -m pysembridge.cli synthesize-generic-bridge \
 This source-only mode does not require a CVE manifest or a known broken trace.
 It classifies potential Python dynamic semantics such as receiver dispatch,
 container element propagation, string construction, attribute indirection,
-dynamic calls, and framework/decorator-style flow. The generated bridge is a
-candidate semantic hypothesis; analyzer verification is still required before
-treating it as an executable vulnerability chain.
+dynamic calls, descriptors, metaclasses, context managers, iterators,
+registered dispatch, async/concurrency scheduling, dynamic code execution, and
+typing-model boundaries. The generated bridge is a candidate semantic
+hypothesis; analyzer verification is still required before treating it as an
+executable vulnerability chain. See `docs/recognizer-dynamic-features.md` for
+the current recognizer coverage.
 
 Compile the included pyload bridge into YASA external facts:
 
@@ -136,7 +139,9 @@ finding. Analyzer-level propagation injection is the next deeper integration
 stage.
 
 See `docs/repository-structure.md` for the repository layout,
-`docs/tool-development-flow-yasa.md` for the complete PySemBridge workflow, and
+`docs/recognizer-dynamic-features.md` for AST recognizer coverage,
+`docs/tool-development-flow-yasa.md` for the complete PySemBridge workflow,
+`docs/security-test-report.md` for the security test record, and
 `docs/yasa-sembridge-tool-guide.md` for the integrated YASA-sembridge usage
 guide. The full modified YASA engine is checked in under
 `integrations/yasa/YASA-Engine-sembridge/`.
