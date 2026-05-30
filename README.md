@@ -141,10 +141,52 @@ boundary finding, then PySemBridge facts append an enhanced complete-chain SARIF
 finding. Analyzer-level propagation injection is the next deeper integration
 stage.
 
+## Test And Validation Snapshot
+
+The repository includes lightweight regression tests that can be run without
+installing the optional YASA backend:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+Current expected result:
+
+```text
+Ran 5 tests
+OK
+```
+
+The tests cover Semantic Bridge IR schema validation and AST recognizer
+coverage for representative dynamic Python features. The CLI entry point can
+also be checked directly:
+
+```bash
+python3 -m pysembridge.cli --help
+```
+
+For analyzer-level experiments, `run-yasa` records generated bridge files, YASA
+facts, SARIF output, and pipeline summaries under `experiments/results/`.
+Generated results are intentionally kept out of version control.
+
+## Development Checks
+
+Before changing the recognizer, synthesizer, or IR loader, run the regression
+suite and make sure the CLI still loads:
+
+```bash
+python3 -m unittest discover -s tests -v
+python3 -m pysembridge.cli --help
+```
+
+The tests are intentionally small and fast. They check the core IR validation
+path and representative AST feature extraction behavior; backend-specific YASA
+runs are kept as reproducible scripts and generated reports under
+`experiments/`.
+
 See `docs/repository-structure.md` for the repository layout,
 `docs/recognizer-dynamic-features.md` for AST recognizer coverage,
 `docs/tool-development-flow-yasa.md` for the complete PySemBridge workflow,
-`docs/competition-code-stats.md` for competition line-count scope,
 `docs/security-test-report.md` for the security test record, and
 `docs/yasa-sembridge-tool-guide.md` for the integrated YASA-sembridge usage
 guide. The full modified YASA engine is checked in under
