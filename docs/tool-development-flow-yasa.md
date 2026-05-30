@@ -159,6 +159,40 @@ Keep generated reports under `experiments/results/`, which is intentionally
 ignored by git. Commit stable bridge IR, PySemBridge source code, experiment
 scripts, docs, and the integrated YASA-sembridge source tree.
 
+## Validation Effect
+
+PySemBridge is designed to make a semantic supplementation attempt observable at
+several layers instead of relying on a single final report:
+
+- The recognizer emits raw AST feature hits and grouped semantic gap families.
+- The synthesizer writes either a bridge candidate or a full classification
+  bundle for inspection.
+- The YASA compiler writes explicit `graph_facts`, `flow_facts`, validation
+  metadata, and evidence locations.
+- `verify-chain` checks whether the generated bridge connects the intended
+  source and sink expressions before the analyzer is run.
+- YASA-sembridge writes `semantic_bridge_summary.json` beside the SARIF report.
+- `verify-sarif` checks whether the final report contains an enhanced
+  source-to-sink trace, including required trace text such as a target file or
+  method name.
+
+The self-contained regression suite can be run without the YASA backend:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+Current expected result:
+
+```text
+Ran 5 tests
+OK
+```
+
+These tests cover bridge schema validation and recognizer behavior. Full
+analyzer experiments are intentionally recorded as reproducible commands and
+generated outputs under `experiments/results/`.
+
 ## pyload Example
 
 The pyload case demonstrates a boundary-to-real-sink bridge:

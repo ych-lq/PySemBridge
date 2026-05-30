@@ -2,8 +2,7 @@
 
 ## Scope
 
-This security review covers the self-developed PySemBridge tool code and
-supporting scripts:
+This security review covers the PySemBridge tool code and supporting scripts:
 
 - `pysembridge/`
 - `tests/`
@@ -20,7 +19,7 @@ engine copy because those directories contain external or upstream code:
 
 ## Goals
 
-The goal is to confirm that the submitted self-developed code does not contain
+The goal is to confirm that the reviewed project code does not contain
 intentionally planted malicious behavior, such as backdoors, credential theft,
 hidden network beacons, reverse shells, destructive commands, or hard-coded
 secrets.
@@ -46,7 +45,7 @@ Result summary:
   shell backdoor.
 - No `eval`, `exec`, `os.system`, socket beaconing, reverse shell, destructive
   `rm -rf`, credential exfiltration, or hard-coded secret pattern was found in
-  the reviewed self-developed code.
+  the reviewed project code.
 
 ### Secret Pattern Scan
 
@@ -93,22 +92,51 @@ Result summary:
 Command:
 
 ```bash
-python3 -m unittest tests.test_recognizer_features
+python3 -m unittest discover -s tests -v
 ```
 
 Expected result:
 
 ```text
-Ran 1 test
+test_loads_minimal_valid_bridge (test_ir_loader.BridgeLoaderValidationTest) ... ok
+test_rejects_empty_gap_types (test_ir_loader.BridgeLoaderValidationTest) ... ok
+test_rejects_missing_required_fields (test_ir_loader.BridgeLoaderValidationTest) ... ok
+test_rejects_non_python_language (test_ir_loader.BridgeLoaderValidationTest) ... ok
+test_extracts_dynamic_gap_features_from_small_sample (test_recognizer_features.RecognizerFeatureExtractionTest) ... ok
+
+Ran 5 tests
 OK
 ```
+
+Coverage summary:
+
+- Bridge loader tests confirm that valid IR can be loaded and invalid language,
+  missing required fields, and empty gap types are rejected.
+- Recognizer tests confirm that representative Python dynamic features are
+  extracted from a compact regression fixture.
+- The tests do not execute fixture-level dangerous constructs such as `eval`;
+  those constructs are parsed as AST evidence for static-recognition behavior.
+
+### CLI Availability Check
+
+Command:
+
+```bash
+python3 -m pysembridge.cli --help
+```
+
+Expected result summary:
+
+- The `pysembridge` CLI loads successfully.
+- The help output lists `compile-yasa`, `verify-chain`, `synthesize`,
+  `synthesize-auto`, `scan-gaps`, `synthesize-generic-bridge`,
+  `verify-sarif`, and `run-yasa`.
 
 ## Conclusion
 
 No evidence of intentionally planted malicious code was found in the reviewed
-self-developed PySemBridge code. The only sensitive-pattern matches are
-explainable static-analysis recognizer patterns or explicit YASA CLI
-orchestration.
+PySemBridge code. The only sensitive-pattern matches are explainable
+static-analysis recognizer patterns or explicit YASA CLI orchestration.
 
-For competition submission, cite this report together with the exact commands
-above so reviewers can reproduce the same checks.
+Keep this report together with the exact commands above so the checks can be
+reproduced later.
